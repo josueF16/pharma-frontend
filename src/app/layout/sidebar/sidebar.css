@@ -1,0 +1,40 @@
+:host {
+  display: block;
+  width: 190px;
+  flex-shrink: 0;
+  background: white;
+  border-right: 1px solid #e2e8f0;
+}
+
+.sidebar {
+  padding: 16px 10px;
+}
+
+h2 {
+  margin: 0 0 12px;
+  padding: 0 6px;
+  font-size: 11px;
+  font-weight: normal;
+  color: #64748b;
+}
+
+a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  margin-bottom: 4px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 14px;
+  color: #334155;
+}
+
+a:hover {
+  background: #eef2f7;
+}
+
+a.activo {
+  background: #14325c;
+  color: white;
+}

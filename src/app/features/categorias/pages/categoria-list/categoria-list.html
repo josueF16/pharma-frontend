@@ -1,0 +1,96 @@
+<section>
+  <div class="cabecera">
+    <h1>Categorías</h1>
+
+    <a class="boton-nuevo" routerLink="/categorias/nuevo">
+      + Nueva categoría
+    </a>
+  </div>
+
+  <input
+    #buscador
+    class="buscador"
+    type="search"
+    aria-label="Buscar categorías por nombre"
+    placeholder="Buscar por nombre..."
+    [value]="busqueda()"
+    (input)="busqueda.set(buscador.value)"
+  />
+
+  @if (error()) {
+    <div class="error" role="alert">
+      <p>{{ error() }}</p>
+      <button type="button" (click)="cargar()">Reintentar</button>
+    </div>
+  }
+
+  @if (cargando()) {
+    <p>Cargando categorías...</p>
+  } @else {
+    <div class="tabla">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (categoria of categoriasFiltradas(); track categoria.id) {
+            <tr>
+              <td>{{ categoria.id }}</td>
+              <td>{{ categoria.nombre }}</td>
+              <td>{{ categoria.descripcion || '—' }}</td>
+              <td>
+                <span
+                  class="estado"
+                  [class.activo]="categoria.estado"
+                  [class.inactivo]="!categoria.estado"
+                >
+                  {{ categoria.estado ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td>
+                <div class="acciones">
+                  <a
+                    class="editar"
+                    [routerLink]="['/categorias', categoria.id, 'editar']"
+                  >
+                    Editar
+                  </a>
+
+                  <button
+                    class="eliminar"
+                    type="button"
+                    [disabled]="eliminando() !== null"
+                    (click)="eliminar(categoria)"
+                  >
+                    {{
+                      eliminando() === categoria.id
+                        ? 'Eliminando...'
+                        : 'Eliminar'
+                    }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="vacio">
+                {{
+                  categorias().length === 0
+                    ? 'No hay categorías registradas.'
+                    : 'No se encontraron coincidencias.'
+                }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

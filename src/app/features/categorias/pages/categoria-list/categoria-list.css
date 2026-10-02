@@ -1,0 +1,120 @@
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+h1 {
+  margin: 0;
+  color: #14325c;
+  font-size: 24px;
+}
+
+.boton-nuevo {
+  padding: 10px 14px;
+  border-radius: 5px;
+  background: #14325c;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.buscador {
+  width: 300px;
+  max-width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  border: 1px solid #d8e0eb;
+  border-radius: 5px;
+  background: white;
+  font-size: 14px;
+}
+
+.tabla {
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th {
+  padding: 12px;
+  background: #14325c;
+  color: white;
+  text-align: left;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid #edf0f5;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.estado {
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.activo {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.inactivo {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.acciones {
+  display: flex;
+  gap: 8px;
+}
+
+.editar,
+.eliminar {
+  padding: 6px 10px;
+  border: 1px solid #d8e0eb;
+  border-radius: 5px;
+  background: white;
+  text-decoration: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.editar {
+  color: #334155;
+}
+
+.eliminar {
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+.eliminar:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.vacio {
+  text-align: center;
+  color: #64748b;
+  padding: 24px;
+}
+
+.error {
+  margin-bottom: 16px;
+  color: #b91c1c;
+}

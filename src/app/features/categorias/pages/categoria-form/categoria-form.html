@@ -1,0 +1,67 @@
+<section class="panel">
+  <h1>{{ id === null ? 'Nueva categoría' : 'Editar categoría' }}</h1>
+
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+
+  @if (cargando()) {
+    <p>Cargando categoría...</p>
+  }
+
+  <form [formGroup]="formulario" (ngSubmit)="guardar()">
+    <div class="campo">
+      <label for="nombre">Nombre *</label>
+      <input
+        id="nombre"
+        type="text"
+        formControlName="nombre"
+        maxlength="50"
+      />
+
+      @if (
+        formulario.controls.nombre.touched &&
+        formulario.controls.nombre.invalid
+      ) {
+        <small class="error">
+          El nombre es obligatorio y debe tener entre 3 y 50 caracteres.
+        </small>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="descripcion">Descripción</label>
+      <textarea
+        id="descripcion"
+        formControlName="descripcion"
+        rows="4"
+        maxlength="200"
+      ></textarea>
+
+      @if (
+        formulario.controls.descripcion.touched &&
+        formulario.controls.descripcion.invalid
+      ) {
+        <small class="error">
+          La descripción no debe superar los 200 caracteres.
+        </small>
+      }
+    </div>
+
+    <label class="checkbox">
+      <input type="checkbox" formControlName="estado" />
+      Categoría activa
+    </label>
+
+    <div class="acciones">
+      <button
+        type="submit"
+        [disabled]="guardando() || cargando() || formulario.disabled"
+      >
+        {{ guardando() ? 'Guardando...' : 'Guardar' }}
+      </button>
+
+      <a routerLink="/categorias">Cancelar</a>
+    </div>
+  </form>
+</section>
