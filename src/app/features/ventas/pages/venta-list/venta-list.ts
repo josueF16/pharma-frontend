@@ -5,11 +5,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { VentaService } from '../../services/venta-service';
 import { FiltroVentas, Venta } from '../../models/venta.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-venta-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './venta-list.html',
   styleUrl: './venta-list.css',
 })

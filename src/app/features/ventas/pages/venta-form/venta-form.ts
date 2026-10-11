@@ -48,6 +48,7 @@ export class VentaForm implements OnInit {
   readonly guardando = signal(false);
   readonly error = signal('');
   readonly confirmacion = signal(false);
+  readonly imprimirAlRegistrar = signal(false);
 
   readonly buscarCliente = new FormControl('', { nonNullable: true });
   readonly buscarProducto = new FormControl('', { nonNullable: true });
@@ -258,7 +259,9 @@ export class VentaForm implements OnInit {
 
     this.ventaService.registrar(datos).subscribe({
       next: venta => {
-        this.router.navigate(['/ventas', venta.id]).then(abierta => {
+        this.router.navigate(['/ventas', venta.id], {
+          queryParams: this.imprimirAlRegistrar() ? { imprimir: 1 } : {}
+        }).then(abierta => {
           if (!abierta) {
             this.error.set(
               `Venta ${venta.id} registrada. Abre su detalle desde la consulta de ventas.`

@@ -13,3 +13,14 @@ input,
 select {
   font: inherit;
 }
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  body {
+    margin: 0;
+    background: white;
+  }
+}

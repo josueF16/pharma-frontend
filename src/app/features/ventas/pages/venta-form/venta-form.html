@@ -241,6 +241,15 @@
           Revisa los datos. La venta se registrará cuando presiones
           “Confirmar y registrar”.
         </p>
+        <label>
+  <input
+    type="checkbox"
+    [checked]="imprimirAlRegistrar()"
+    [disabled]="guardando()"
+    (change)="imprimirAlRegistrar.set($any($event.target).checked)"
+  />
+  Imprimir el comprobante al registrar
+</label>
 
         <div class="acciones">
           <button

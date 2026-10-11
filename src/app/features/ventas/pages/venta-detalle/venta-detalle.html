@@ -1,1 +1,108 @@
-<p>venta-detalle works!</p>
+<section class="detalle">
+  <header class="encabezado no-imprimir">
+  <h1>Detalle de venta</h1>
+
+  <div class="acciones">
+    <a routerLink="/ventas" class="boton">
+      Volver a ventas
+    </a>
+
+    <button
+      type="button"
+      class="boton"
+      [disabled]="cargando() || !venta()"
+      (click)="imprimir()"
+    >
+      Imprimir comprobante
+    </button>
+  </div>
+</header>
+
+  @if (cargando()) {
+    <p role="status">Cargando la venta...</p>
+  }
+
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+
+  @if (venta(); as datos) {
+    <article class="comprobante">
+      <div class="titulo">
+        <div>
+          <h2>PharmaSoft</h2>
+          <p>Venta #{{ datos.id }}</p>
+        </div>
+
+        <span
+          class="estado"
+          [class.anulada]="datos.estado === 'ANULADA'"
+        >
+          {{ datos.estado }}
+        </span>
+      </div>
+
+      <div class="informacion">
+        <p>
+          <strong>Cliente:</strong>
+          {{ datos.clienteNombre }}
+        </p>
+        @if (dniCliente()) {
+  <p>
+    <strong>DNI:</strong>
+    {{ dniCliente() }}
+  </p>
+}
+
+        <p>
+          <strong>Fecha:</strong>
+          {{ datos.fechaRegistro | date: 'dd/MM/yyyy HH:mm' }}
+        </p>
+      </div>
+
+      <div class="tabla-contenedor">
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th class="numero">Cantidad</th>
+              <th class="numero">Precio</th>
+              <th class="numero">Subtotal</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (linea of datos.detalles; track $index) {
+              <tr>
+                <td>{{ linea.productoNombre }}</td>
+                <td class="numero">{{ linea.cantidad }}</td>
+                <td class="numero">
+                  {{ linea.precio | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+                </td>
+                <td class="numero">
+                  {{ linea.subtotal | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="4">La venta no contiene detalles.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <p class="total">
+        Total:
+        {{ datos.total | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+      </p>
+      <footer class="solo-impresion">
+  <p>Gracias por su compra</p>
+  <p>
+    Fecha de impresión:
+    {{ fechaImpresion() | date: 'dd/MM/yyyy HH:mm' }}
+  </p>
+</footer>
+    </article>
+  }
+</section>

@@ -238,4 +238,18 @@ td {
   .ventas {
     padding: 0;
   }
+  .boton-nueva {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 10px 16px;
+  border-radius: 7px;
+  background: #17365f;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.boton-nueva:hover {
+  background: #244d80;
+}
 }
