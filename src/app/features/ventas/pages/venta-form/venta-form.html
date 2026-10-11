@@ -1,0 +1,266 @@
+<section class="venta">
+  <header class="encabezado">
+    <div>
+      <h1>Nueva venta</h1>
+      <p>Selecciona un cliente y agrega los productos.</p>
+    </div>
+
+    <a routerLink="/ventas">Volver a ventas</a>
+  </header>
+
+  @if (error()) {
+    <p class="mensaje-error" role="alert">{{ error() }}</p>
+  }
+
+  @if (cargando()) {
+    <p>Cargando clientes y productos...</p>
+  } @else {
+    <form [formGroup]="formulario" (ngSubmit)="revisar()">
+      <fieldset [disabled]="confirmacion() || guardando()">
+        <section class="panel">
+          <h2>1. Cliente</h2>
+
+          @if (clienteSeleccionado(); as cliente) {
+            <div class="cliente-seleccionado">
+              <strong>
+                {{ cliente.nombres }} {{ cliente.apellidos }}
+              </strong>
+              <span>DNI: {{ cliente.dni }}</span>
+            </div>
+          } @else {
+            <p>Selecciona un cliente para registrar la venta.</p>
+          }
+
+          <label for="buscar-cliente">
+            Buscar cliente por DNI, nombres o apellidos
+          </label>
+
+          <input
+            id="buscar-cliente"
+            type="search"
+            [formControl]="buscarCliente"
+            placeholder="Escribe el DNI o nombre"
+            autocomplete="off"
+            (keydown.enter)="$event.preventDefault()"
+          />
+
+          <div class="resultados">
+            @for (cliente of clientesEncontrados(); track cliente.id) {
+              <button
+                type="button"
+                class="resultado"
+                (click)="seleccionarCliente(cliente)"
+              >
+                <strong>
+                  {{ cliente.nombres }} {{ cliente.apellidos }}
+                </strong>
+                <span>DNI: {{ cliente.dni }}</span>
+              </button>
+            } @empty {
+              <p>No se encontraron clientes activos.</p>
+            }
+          </div>
+
+          @if (
+            formulario.controls.clienteId.touched &&
+            formulario.controls.clienteId.invalid
+          ) {
+            <p class="mensaje-error">El cliente es obligatorio.</p>
+          }
+        </section>
+
+        <section class="panel">
+          <h2>2. Productos</h2>
+
+          <label for="buscar-producto">
+            Buscar producto por nombre o categoría
+          </label>
+
+          <input
+            id="buscar-producto"
+            type="search"
+            [formControl]="buscarProducto"
+            placeholder="Escribe el nombre del producto"
+            autocomplete="off"
+            (keydown.enter)="agregarPrimerProducto($event)"
+          />
+
+          <p class="ayuda">
+            Haz clic en un producto para agregarlo.
+            Enter agrega el primer resultado.
+          </p>
+
+          <div class="resultados">
+            @for (producto of productosEncontrados(); track producto.id) {
+              <button
+                type="button"
+                class="resultado"
+                (click)="agregarProducto(producto)"
+              >
+                <strong>{{ producto.nombre }}</strong>
+                <span>{{ producto.categoriaNombre }}</span>
+                <span>
+                  {{ producto.precio | currency:'PEN':'S/ ':'1.2-2' }}
+                  · Stock: {{ producto.stock }}
+                </span>
+              </button>
+            } @empty {
+              <p>No se encontraron productos activos con stock.</p>
+            }
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>3. Detalle de la venta</h2>
+
+          <div class="tabla-contenedor">
+            <table>
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Stock</th>
+                  <th>Precio</th>
+                  <th>Cantidad</th>
+                  <th>Subtotal</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+
+              <tbody formArrayName="detalles">
+                @for (linea of lineas(); track $index; let i = $index) {
+                  <tr [formGroupName]="i">
+                    <td>{{ linea.producto?.nombre }}</td>
+                    <td>{{ linea.producto?.stock }}</td>
+                    <td>
+                      {{
+                        (linea.producto?.precio ?? 0)
+                          | currency:'PEN':'S/ ':'1.2-2'
+                      }}
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        formControlName="cantidad"
+                        min="1"
+                        step="1"
+                        [max]="linea.producto?.stock ?? 0"
+                        [attr.aria-label]="
+                          'Cantidad de ' + linea.producto?.nombre
+                        "
+                      />
+
+                      @if (detalles.at(i).controls.cantidad.invalid) {
+                        <p class="mensaje-error">
+                          Ingresa una cantidad entera entre 1 y
+                          {{ linea.producto?.stock }}.
+                        </p>
+                      }
+                    </td>
+                    <td>
+                      {{ linea.subtotal | currency:'PEN':'S/ ':'1.2-2' }}
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        class="boton-quitar"
+                        (click)="quitarLinea(i)"
+                      >
+                        Quitar
+                      </button>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="6">
+                      Todavía no agregaste productos.
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          @if (detalles.touched && detalles.hasError('required')) {
+            <p class="mensaje-error">
+              Agrega al menos un producto.
+            </p>
+          }
+
+          <p class="total">
+            Total estimado:
+            <strong>
+              {{ total() | currency:'PEN':'S/ ':'1.2-2' }}
+            </strong>
+          </p>
+
+          <p class="ayuda">
+            El servidor calculará el importe definitivo con los precios
+            vigentes y comprobará el stock al registrar.
+          </p>
+        </section>
+
+        <button type="submit" class="boton-principal">
+          Revisar venta
+        </button>
+      </fieldset>
+    </form>
+
+    @if (confirmacion()) {
+      <section
+        class="panel confirmacion"
+        aria-labelledby="titulo-confirmacion"
+      >
+        <h2 id="titulo-confirmacion">Confirmar venta</h2>
+
+        @if (clienteSeleccionado(); as cliente) {
+          <p>
+            <strong>Cliente:</strong>
+            {{ cliente.nombres }} {{ cliente.apellidos }}
+            — DNI: {{ cliente.dni }}
+          </p>
+        }
+
+        <ul>
+          @for (linea of lineas(); track $index) {
+            <li>
+              {{ linea.producto?.nombre }}
+              × {{ linea.cantidad }}:
+              {{ linea.subtotal | currency:'PEN':'S/ ':'1.2-2' }}
+            </li>
+          }
+        </ul>
+
+        <p class="total">
+          Total estimado:
+          <strong>
+            {{ total() | currency:'PEN':'S/ ':'1.2-2' }}
+          </strong>
+        </p>
+
+        <p>
+          Revisa los datos. La venta se registrará cuando presiones
+          “Confirmar y registrar”.
+        </p>
+
+        <div class="acciones">
+          <button
+            type="button"
+            [disabled]="guardando()"
+            (click)="volverAEditar()"
+          >
+            Volver a editar
+          </button>
+
+          <button
+            type="button"
+            class="boton-principal"
+            [disabled]="guardando()"
+            (click)="confirmar()"
+          >
+            {{ guardando() ? 'Registrando...' : 'Confirmar y registrar' }}
+          </button>
+        </div>
+      </section>
+    }
+  }
+</section>

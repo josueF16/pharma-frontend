@@ -1,0 +1,188 @@
+<section class="ventas">
+  <div class="encabezado">
+    <h1>Consulta de ventas</h1>
+    <p>Busca ventas y revisa sus productos.</p>
+  </div>
+
+  <form (ngSubmit)="buscar()" class="tarjeta">
+    <fieldset [disabled]="cargando()">
+      <legend>Filtros de búsqueda</legend>
+
+      <div class="filtros">
+        <div class="campo">
+          <label for="clienteId">ID del cliente</label>
+          <input
+            id="clienteId"
+            name="clienteId"
+            type="number"
+            min="1"
+            step="1"
+            placeholder="Todos los clientes"
+            [(ngModel)]="filtro.clienteId"
+          />
+        </div>
+
+        <div class="campo">
+          <label for="estado">Estado</label>
+          <select
+            id="estado"
+            name="estado"
+            [(ngModel)]="filtro.estado"
+          >
+            <option [ngValue]="null">Todos los estados</option>
+            <option value="REGISTRADA">Registrada</option>
+            <option value="ANULADA">Anulada</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="desde">Desde</label>
+          <input
+            id="desde"
+            name="desde"
+            type="date"
+            [(ngModel)]="filtro.desde"
+          />
+        </div>
+
+        <div class="campo">
+          <label for="hasta">Hasta</label>
+          <input
+            id="hasta"
+            name="hasta"
+            type="date"
+            [(ngModel)]="filtro.hasta"
+          />
+        </div>
+      </div>
+
+      <div class="acciones">
+        <button type="submit" class="primario">
+          {{ cargando() ? 'Buscando...' : 'Buscar ventas' }}
+        </button>
+
+        <button type="button" class="secundario" (click)="limpiar()">
+          Limpiar filtros
+        </button>
+      </div>
+    </fieldset>
+  </form>
+
+  @if (error()) {
+    <p class="mensaje error" role="alert">{{ error() }}</p>
+  }
+
+  @if (cargando()) {
+    <p class="mensaje" role="status">Cargando ventas...</p>
+  } @else if (!error()) {
+    <div class="tarjeta">
+      <h2>Resultados: {{ ventas().length }}</h2>
+
+      <div class="tabla-contenedor">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Fecha</th>
+              <th>Cliente</th>
+              <th>Estado</th>
+              <th class="numero">Total</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (venta of ventas(); track venta.id) {
+              <tr>
+                <td>{{ venta.id }}</td>
+                <td>{{ venta.fechaRegistro | date: 'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ venta.clienteNombre }}</td>
+                <td>
+                  <span
+                    class="estado"
+                    [class.anulada]="venta.estado === 'ANULADA'"
+                  >
+                    {{ venta.estado }}
+                  </span>
+                </td>
+                <td class="numero">
+                  {{ venta.total | number: '1.2-2' }}
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="secundario"
+                    (click)="verDetalle(venta)"
+                  >
+                    Ver detalle
+                  </button>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6" class="vacio">
+                  No se encontraron ventas con estos filtros.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  @if (ventaSeleccionada(); as venta) {
+    <div class="tarjeta detalle">
+      <div class="detalle-encabezado">
+        <h2>Detalle de la venta #{{ venta.id }}</h2>
+        <button
+          type="button"
+          class="secundario"
+          (click)="cerrarDetalle()"
+        >
+          Cerrar
+        </button>
+      </div>
+
+      <p><strong>Cliente:</strong> {{ venta.clienteNombre }}</p>
+
+      <div class="tabla-contenedor">
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th class="numero">Cantidad</th>
+              <th class="numero">Precio</th>
+              <th class="numero">Subtotal</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (detalle of venta.detalles; track $index) {
+              <tr>
+                <td>{{ detalle.productoNombre }}</td>
+                <td class="numero">{{ detalle.cantidad }}</td>
+                <td class="numero">
+                  {{ detalle.precio | number: '1.2-2' }}
+                </td>
+                <td class="numero">
+                  {{ detalle.subtotal | number: '1.2-2' }}
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="4" class="vacio">
+                  Esta respuesta no contiene detalles.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <p class="total">
+        Total: {{ venta.total | number: '1.2-2' }}
+      </p>
+    </div>
+  }
+</section>
