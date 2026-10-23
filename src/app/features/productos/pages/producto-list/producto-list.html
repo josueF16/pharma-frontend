@@ -1,0 +1,84 @@
+<section class="card">
+  <div class="cabecera">
+    <h2>Productos</h2>
+
+    <a
+      *appSiPermiso="'CATALOGO_ESCRIBIR'"
+      routerLink="nuevo"
+      class="btn btn-primary"
+    >
+      + Nuevo producto
+    </a>
+  </div>
+
+  @if (error()) {
+    <div class="alerta" role="alert">
+      {{ error() }}
+    </div>
+  }
+
+  @if (mensaje()) {
+    <p role="status">{{ mensaje() }}</p>
+  }
+
+  @if (cargando()) {
+    <p role="status">Cargando productos…</p>
+  } @else {
+    <div class="tabla-contenedor">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Categoría</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Stock</th>
+            <th scope="col">Estado</th>
+            <th *appSiPermiso="'CATALOGO_ESCRIBIR'" scope="col">
+              Acciones
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (producto of productos(); track producto.id) {
+            <tr>
+              <td>{{ producto.id }}</td>
+              <td>{{ producto.nombre }}</td>
+              <td>{{ producto.categoriaNombre }}</td>
+              <td>{{ producto.precio | number: '1.2-2' }}</td>
+              <td>{{ producto.stock }}</td>
+              <td>{{ producto.estado ? 'Activo' : 'Inactivo' }}</td>
+
+              <td *appSiPermiso="'CATALOGO_ESCRIBIR'">
+                <div class="acciones">
+                  <a
+                    [routerLink]="[producto.id, 'editar']"
+                    class="btn btn-primary"
+                  >
+                    Editar
+                  </a>
+
+                  <button
+                    type="button"
+                    class="btn btn-baja"
+                    [disabled]="!producto.estado || procesando() !== null"
+                    (click)="darDeBaja(producto)"
+                  >
+                    {{ procesando() === producto.id
+                      ? 'Procesando…'
+                      : 'Dar de baja' }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (productos().length === 0 && !error()) {
+      <p>No hay productos registrados.</p>
+    }
+  }
+</section>
