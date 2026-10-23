@@ -46,6 +46,14 @@ export const routes: Routes = [
             .then(m => m.CATEGORIAS_ROUTES)
       },
       {
+        path: 'productos',
+        canActivate: [permisoGuardGuard],
+        data: { permiso: 'CATALOGO_LEER' },
+        loadChildren: () =>
+          import('./features/productos/productos.routes')
+            .then(m => m.PRODUCTOS_ROUTES)
+      },
+      {
         path: 'ventas',
         canActivate: [permisoGuardGuard],
         data: { permiso: 'VENTAS_LEER' },
