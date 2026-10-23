@@ -9,3 +9,11 @@ export interface Producto {
   fechaCreacion: string;
   fechaModificacion: string | null;
 }
+
+export interface ProductoRequest {
+  nombre: string;
+  precio: number;
+  stock: number;
+  estado: boolean;
+  categoriaId: number;
+}

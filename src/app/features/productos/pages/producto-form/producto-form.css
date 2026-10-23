@@ -1,0 +1,54 @@
+h2 {
+  margin: 0 0 20px;
+  color: #0f2e5c;
+}
+
+fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.campos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nombre {
+  grid-column: 1 / -1;
+}
+
+label {
+  font-weight: 600;
+  color: #0f2e5c;
+}
+
+.error {
+  color: #b42318;
+}
+
+.acciones {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn-cancelar {
+  border-color: #cbd5e1;
+  background: #fff;
+  color: #0f2e5c;
+}
+
+@media (max-width: 600px) {
+  .campos {
+    grid-template-columns: 1fr;
+  }
+}

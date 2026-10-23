@@ -1,0 +1,142 @@
+<section class="card">
+  <h2>{{ editando() ? 'Editar producto' : 'Nuevo producto' }}</h2>
+
+  @if (error()) {
+    <div class="alerta" role="alert">
+      {{ error() }}
+    </div>
+  }
+
+  @if (cargando()) {
+    <p role="status">Cargando datos…</p>
+  } @else if (listo()) {
+    <form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+      <fieldset [disabled]="guardando()">
+        <div class="campos">
+          <div class="campo nombre">
+            <label for="nombre">Nombre</label>
+            <input
+              id="nombre"
+              class="input"
+              type="text"
+              formControlName="nombre"
+              maxlength="150"
+            />
+
+            @if (form.controls.nombre.touched &&
+                 form.controls.nombre.invalid) {
+              <small class="error">
+                Ingrese un nombre de entre 3 y 150 caracteres.
+              </small>
+            }
+          </div>
+
+          <div class="campo">
+            <label for="precio">Precio</label>
+            <input
+              id="precio"
+              class="input"
+              type="number"
+              formControlName="precio"
+              min="0.01"
+              max="99999999.99"
+              step="0.01"
+            />
+
+            @if (form.controls.precio.touched &&
+                 form.controls.precio.invalid) {
+              <small class="error">
+                Ingrese un precio desde 0.01 hasta 99999999.99,
+                con máximo dos decimales.
+              </small>
+            }
+          </div>
+
+          <div class="campo">
+            <label for="stock">Stock</label>
+            <input
+              id="stock"
+              class="input"
+              type="number"
+              formControlName="stock"
+              min="0"
+              max="2147483647"
+              step="1"
+            />
+
+            @if (form.controls.stock.touched &&
+                 form.controls.stock.invalid) {
+              <small class="error">
+                Ingrese un número entero entre 0 y 2147483647.
+              </small>
+            }
+          </div>
+
+          <div class="campo">
+            <label for="categoriaId">Categoría</label>
+            <select
+              id="categoriaId"
+              class="input"
+              formControlName="categoriaId"
+            >
+              <option [ngValue]="0">Seleccione una categoría</option>
+
+              @for (categoria of categorias(); track categoria.id) {
+                <option [ngValue]="categoria.id">
+                  {{ categoria.nombre }}
+                  {{ categoria.estado ? '' : '(Inactiva)' }}
+                </option>
+              }
+            </select>
+
+            @if (form.controls.categoriaId.touched &&
+                 form.controls.categoriaId.invalid) {
+              <small class="error">Seleccione una categoría.</small>
+            }
+
+            @if (categorias().length === 0) {
+              <small class="error">
+                No hay categorías disponibles. Registre una primero.
+              </small>
+            }
+          </div>
+
+          <div class="campo">
+            <label for="estado">Estado</label>
+            <select
+              id="estado"
+              class="input"
+              formControlName="estado"
+            >
+              <option [ngValue]="true">Activo</option>
+              <option [ngValue]="false">Inactivo</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="acciones">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="guardando() || categorias().length === 0"
+          >
+            {{ guardando() ? 'Guardando…' : 'Guardar' }}
+          </button>
+
+          <a
+            routerLink="/productos"
+            class="btn btn-cancelar"
+            [attr.aria-disabled]="guardando()"
+            (click)="guardando() && $event.preventDefault()"
+          >
+            Cancelar
+          </a>
+        </div>
+      </fieldset>
+    </form>
+  } @else {
+    <a routerLink="/productos" class="btn btn-primary">
+      Volver a Productos
+    </a>
+  }
+</section>
