@@ -1,0 +1,39 @@
+<section class="card">
+  <h2>Productos más vendidos</h2>
+
+  @if (error()) {
+    <p role="alert">
+      No se pudo consultar el reporte. Intenta nuevamente más tarde.
+    </p>
+  } @else if (filas(); as productos) {
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Categoría</th>
+          <th>Cantidad vendida</th>
+          <th>Monto total</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (producto of productos; track producto.productoId) {
+          <tr>
+            <td>{{ producto.productoNombre }}</td>
+            <td>{{ producto.categoriaNombre }}</td>
+            <td>{{ producto.cantidadVendida }}</td>
+            <td>
+              {{ producto.montoTotal | currency: 'PEN' : 'S/ ' }}
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4">Aún no hay ventas registradas.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <p>Consultando productos más vendidos…</p>
+  }
+</section>

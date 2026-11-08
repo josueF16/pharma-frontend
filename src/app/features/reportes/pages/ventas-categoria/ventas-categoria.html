@@ -1,0 +1,103 @@
+<section class="reporte">
+  <header>
+    <h1>Reporte de ventas por categoría</h1>
+    <p>
+      Consulta las unidades vendidas y el importe por categoría.
+      Deja las fechas vacías para consultar todo el historial.
+    </p>
+  </header>
+
+  <form class="filtros" (ngSubmit)="generar()">
+    <div class="campo">
+      <label for="desde">Desde</label>
+      <input
+        id="desde"
+        name="desde"
+        type="date"
+        [(ngModel)]="desde"
+        [disabled]="cargando()"
+      />
+    </div>
+
+    <div class="campo">
+      <label for="hasta">Hasta</label>
+      <input
+        id="hasta"
+        name="hasta"
+        type="date"
+        [(ngModel)]="hasta"
+        [disabled]="cargando()"
+      />
+    </div>
+
+    <button type="submit" [disabled]="cargando()">
+      {{ cargando() ? 'Generando...' : 'Generar' }}
+    </button>
+  </form>
+
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+
+  @if (cargando()) {
+    <p role="status">Cargando reporte...</p>
+  }
+
+  @if (consultado() && !cargando()) {
+    @if (datos().length === 0) {
+      <p class="vacio" role="status">
+        No hay ventas en el periodo seleccionado
+      </p>
+    } @else {
+      <div class="tabla-contenedor">
+        <table>
+          <caption>Ventas agrupadas por categoría</caption>
+
+          <thead>
+            <tr>
+              <th scope="col">Categoría</th>
+              <th scope="col" class="numero">Cantidad vendida</th>
+              <th scope="col" class="numero">Monto total</th>
+              <th scope="col">Monto respecto al mayor</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (fila of datos(); track fila.categoriaId) {
+              <tr>
+                <td>{{ fila.categoriaNombre }}</td>
+                <td class="numero">{{ fila.cantidadVendida }}</td>
+                <td class="numero">
+                  {{ fila.montoTotal | currency:'PEN':'S/ ':'1.2-2' }}
+                </td>
+                <td>
+                  <div class="barra-fondo" aria-hidden="true">
+                    <div
+                      class="barra"
+                      [style.width.%]="porcentaje(fila.montoTotal)"
+                    ></div>
+                  </div>
+                  <small>
+                    {{ porcentaje(fila.montoTotal).toFixed(1) }}%
+                    del mayor monto
+                  </small>
+                </td>
+              </tr>
+            }
+          </tbody>
+
+          <tfoot>
+            <tr>
+              <th scope="row">Total</th>
+              <td class="numero">{{ totalUnidades() }}</td>
+              <td class="numero">
+                {{ totalMonto() | currency:'PEN':'S/ ':'1.2-2' }}
+              </td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    }
+  }
+</section>

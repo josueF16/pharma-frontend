@@ -1,0 +1,46 @@
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin: 0;
+  color: #0f2e5c;
+}
+
+.tabla-contenedor {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid #dce3ed;
+  text-align: left;
+}
+
+th {
+  background: #f3f6fc;
+  color: #0f2e5c;
+}
+
+.acciones {
+  display: flex;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.btn-baja {
+  border-color: #b42318;
+  background: #fff;
+  color: #b42318;
+}

@@ -24,3 +24,61 @@ select {
     background: white;
   }
 }
+/* Tarjetas */
+.card {
+  background: #fff;
+  border: 1px solid #dce3ed;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+/* Campos de formulario */
+.input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #1e293b;
+}
+
+.input:focus {
+  outline: 2px solid #0f2e5c;
+  outline-offset: 1px;
+}
+
+/* Botones y enlaces con apariencia de botón */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #0f2e5c;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #1f5aa6;
+}
+
+.btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Mensajes de error */
+.alerta {
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background: #fee4e2;
+  color: #b42318;
+}

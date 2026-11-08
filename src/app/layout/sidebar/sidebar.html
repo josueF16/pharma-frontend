@@ -1,7 +1,7 @@
 <nav class="sidebar" aria-label="Menú principal">
   <h2>MÓDULOS</h2>
 
-  @for (opcion of menu; track opcion.ruta) {
+  @for (opcion of menu(); track opcion.ruta) {
     <a
       [routerLink]="opcion.ruta"
       routerLinkActive="activo"

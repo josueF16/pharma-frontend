@@ -1,0 +1,150 @@
+:host {
+  display: block;
+  color: #243247;
+}
+
+.reporte {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin-top: 0;
+  color: #17365f;
+}
+
+header p {
+  color: #526175;
+  line-height: 1.5;
+}
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 16px;
+  margin: 24px 0;
+  padding: 20px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+label {
+  font-weight: 600;
+}
+
+input,
+button {
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  font: inherit;
+}
+
+button {
+  background: #17365f;
+  color: white;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.tabla-contenedor {
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+caption {
+  padding: 16px;
+  text-align: left;
+  font-weight: 600;
+}
+
+th,
+td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+thead,
+tfoot {
+  background: #edf2f9;
+}
+
+tfoot {
+  font-weight: 700;
+}
+
+.numero {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.barra-fondo {
+  min-width: 150px;
+  height: 16px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #e2e8f0;
+}
+
+.barra {
+  height: 100%;
+  border-radius: 8px;
+  background: #2563eb;
+}
+
+small {
+  display: block;
+  margin-top: 6px;
+  color: #526175;
+}
+
+.error,
+.vacio {
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.error {
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+.vacio {
+  background: #eaf1fb;
+}
+
+@media (max-width: 600px) {
+  .campo,
+  .filtros button {
+    width: 100%;
+  }
+
+  input {
+    min-width: 0;
+  }
+
+  th,
+  td {
+    padding: 12px;
+  }
+}
